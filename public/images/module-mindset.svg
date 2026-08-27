@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="320" viewBox="0 0 400 320" fill="none">
+  <defs>
+    <radialGradient id="g2" cx="55%" cy="45%" r="55%">
+      <stop offset="0%" stop-color="#ff7a1a" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#05070a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="brain" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffb347"/>
+      <stop offset="100%" stop-color="#ff5a36"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="320" fill="#0a0706"/>
+  <rect width="400" height="320" fill="url(#g2)"/>
+  <ellipse cx="200" cy="200" rx="70" ry="90" fill="#121018"/>
+  <circle cx="200" cy="120" r="48" fill="#1a1520"/>
+  <path d="M165 105 C160 80 180 65 200 68 C220 65 240 80 235 105 C250 115 248 140 230 148 C235 165 220 175 200 172 C180 175 165 165 170 148 C152 140 150 115 165 105 Z" fill="url(#brain)" opacity="0.95"/>
+  <path d="M175 100 L190 115 M210 95 L225 112 M185 130 L210 140 M195 100 L200 145" stroke="#ffe0b2" stroke-width="1.5" opacity="0.7"/>
+  <circle cx="188" cy="112" r="2.5" fill="#fff7ed"/>
+  <circle cx="215" cy="125" r="2.5" fill="#fff7ed"/>
+  <circle cx="200" cy="138" r="2" fill="#fff7ed"/>
+  <path d="M40 220 H360" stroke="#ff7a1a" stroke-opacity="0.15" stroke-width="1"/>
+  <path d="M60 180 H140 M260 160 H340" stroke="#ff7a1a" stroke-opacity="0.2" stroke-width="1"/>
+</svg>

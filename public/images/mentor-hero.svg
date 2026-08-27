@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="560" viewBox="0 0 420 560" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="210" y1="0" x2="210" y2="560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1a2236"/>
+      <stop offset="1" stop-color="#0a0e18"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(210 180) rotate(90) scale(200 160)">
+      <stop stop-color="#2f6bff" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#2f6bff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="420" height="560" fill="url(#bg)"/>
+  <ellipse cx="210" cy="180" rx="160" ry="130" fill="url(#glow)"/>
+  <circle cx="210" cy="175" r="72" fill="#2a3348"/>
+  <circle cx="210" cy="155" r="38" fill="#3d4a66"/>
+  <path d="M120 560 C120 420 160 360 210 360 C260 360 300 420 300 560 Z" fill="#2a3348"/>
+  <text x="210" y="520" text-anchor="middle" fill="#8b9bb8" font-family="system-ui,sans-serif" font-size="14" font-weight="600">Mentor Shiver</text>
+</svg>
