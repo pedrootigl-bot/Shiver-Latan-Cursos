@@ -39,13 +39,13 @@ export function Hero() {
 
   return (
     <section
-      className="relative overflow-hidden bg-black pt-8 pb-20 sm:min-h-[100svh] sm:pt-12 sm:pb-28 lg:pt-16 lg:pb-36"
+      className="relative overflow-hidden bg-black pt-6 pb-12 sm:flex sm:min-h-[98svh] sm:flex-col sm:justify-center sm:pt-8 sm:pb-16 lg:pt-10 lg:pb-20"
       id="inicio"
       aria-label="Apresentação do curso"
     >
-      <div className="relative mx-auto grid max-w-7xl items-center gap-6 px-4 sm:gap-8 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:grid-rows-[auto_auto] lg:gap-x-6 lg:gap-y-7 lg:px-10">
+      <div className="relative mx-auto grid max-w-7xl w-full items-center gap-4 px-4 sm:gap-5 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:grid-rows-[auto_auto] lg:gap-x-6 lg:gap-y-5 lg:px-10">
         <motion.div
-          className="relative z-10 order-1 flex flex-col items-start gap-4 sm:gap-5 lg:col-start-1 lg:row-start-1"
+          className="relative z-10 order-1 flex flex-col items-start gap-3 sm:gap-4 lg:col-start-1 lg:row-start-1"
           variants={staggerContainer}
           initial="hidden"
           animate="visible"
@@ -53,7 +53,7 @@ export function Hero() {
           <motion.h1
             variants={fadeUp}
             transition={{ duration: 0.65, ease: easeOut }}
-            className="max-w-xl text-[1.85rem] font-extrabold leading-[1.15] tracking-tight text-white sm:text-5xl lg:text-[3.15rem]"
+            className="max-w-xl text-[1.75rem] font-extrabold leading-[1.15] tracking-tight text-white sm:text-4xl lg:text-[2.75rem]"
           >
             {headline.before}
             <span className="text-[var(--blue-glow)]">{headline.highlightGreen}</span>
@@ -66,7 +66,7 @@ export function Hero() {
           <motion.p
             variants={fadeUp}
             transition={{ duration: 0.6, ease: easeOut }}
-            className="max-w-md text-[0.95rem] leading-relaxed text-white/90 sm:text-lg"
+            className="max-w-md text-[0.9rem] leading-relaxed text-white/90 sm:text-base lg:text-lg"
           >
             {subheadline.before}
             <span className="font-semibold text-[var(--orange)]">
@@ -79,8 +79,8 @@ export function Hero() {
           </motion.p>
         </motion.div>
 
-        <div className="relative order-2 mx-auto w-full max-w-[420px] sm:max-w-[600px] lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:mx-0 lg:max-w-none">
-          <div className="relative mx-auto aspect-[3/4] w-full max-w-[560px] sm:aspect-[4/5]">
+        <div className="relative order-2 mx-auto w-full max-w-[380px] sm:max-w-[520px] lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:mx-0 lg:max-w-none lg:h-full lg:min-h-0">
+          <div className="relative mx-auto aspect-[3/4] w-full max-h-[50svh] max-w-[480px] sm:aspect-[4/5] sm:max-h-[60svh] lg:max-h-[74svh] lg:max-w-none">
             <motion.div
               className="absolute inset-0"
               initial={{ opacity: 0, scale: 0.96, y: 16 }}
@@ -177,7 +177,7 @@ export function Hero() {
           <Button
             variant="blue"
             href={ctaUrl}
-            className="min-h-12 w-full max-w-md border-2 border-[#0033aa] px-6 py-3.5 text-sm shadow-[0_0_28px_rgba(0,102,255,0.55)] sm:w-auto sm:px-8 sm:py-4 sm:text-base"
+            className="min-h-11 w-full max-w-md border-2 border-[#0033aa] px-6 py-3 text-sm shadow-[0_0_28px_rgba(0,102,255,0.55)] sm:min-h-12 sm:w-auto sm:px-8 sm:py-3.5 sm:text-base"
           >
             <Star className="h-4 w-4 fill-white" />
             {hero.ctaLabel}
@@ -187,11 +187,11 @@ export function Hero() {
 
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-b from-transparent via-[#05070a]/55 to-[#05070a] sm:h-48 lg:h-56"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-b from-transparent via-[#05070a]/55 to-[#05070a] sm:h-28 lg:h-36"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-[radial-gradient(ellipse_at_center_bottom,rgba(47,107,255,0.14),transparent_70%)] sm:h-32"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-[radial-gradient(ellipse_at_center_bottom,rgba(47,107,255,0.14),transparent_70%)] sm:h-24"
       />
     </section>
   );

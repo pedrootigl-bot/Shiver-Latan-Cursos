@@ -7,19 +7,21 @@ export const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || fallbackSiteUrl;
 
 export const seo = {
-  title: "El Mentor Trader | Curso de Opções Binárias + Sala de Sinais",
+  title:
+    "El Mentor Trader | Do Zero ao Lucro em Opções Binárias + Sala ao Vivo",
   titleTemplate: "%s | El Mentor Trader",
   description:
-    "Formação completa em Opções Binárias com El Mentor Trader: método do zero ao lucro, gestão de risco, mindset e sala de sinais ao vivo para operar com consistência.",
+    "O curso completo de Opções Binárias com El Mentor Trader: do zero ao lucro, gestão para não queimar a banca, mindset e sala de sinais ao vivo. Garanta sua vaga.",
   keywords: [
     "El Mentor Trader",
     "curso opções binárias",
-    "sala de sinais",
+    "do zero ao lucro",
+    "sala de sinais ao vivo",
     "trading",
     "opções binárias",
     "curso de trading",
-    "sinais ao vivo",
     "gestão financeira trading",
+    "mindset do trader",
   ],
   ogImage: "/images/mentor-shiver-glow.png",
   locale: "pt_BR",
@@ -121,8 +123,8 @@ export function buildJsonLd() {
       {
         "@type": "Course",
         "@id": `${siteUrl}/#course`,
-        name: "Formação completa em Opções Binárias",
-        description: modules.description,
+        name: "Curso completo de Opções Binárias — do zero ao lucro",
+        description: seo.description,
         provider: {
           "@type": "Person",
           name: mentor.name,

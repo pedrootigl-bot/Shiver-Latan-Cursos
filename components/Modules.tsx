@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useId, useRef, useState } from "react";
-import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { Play, X } from "lucide-react";
 import { content } from "@/lib/content";
@@ -9,6 +8,50 @@ import { easeOut, fadeUp, staggerContainer, viewportOnce } from "@/lib/motion";
 import { startLenis, stopLenis } from "@/lib/lenis-instance";
 
 type ModuleItem = (typeof content.modules.items)[number];
+
+function ModuleCardVideo({
+  src,
+  poster,
+  active,
+}: {
+  src: string;
+  poster: string;
+  active: boolean;
+}) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (active) {
+      const playPromise = video.play();
+      if (playPromise) {
+        playPromise.catch(() => {
+          /* autoplay pode ser bloqueado; poster cobre */
+        });
+      }
+      return;
+    }
+
+    video.pause();
+    video.currentTime = 0;
+  }, [active]);
+
+  return (
+    <video
+      ref={videoRef}
+      className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105 group-active:scale-[1.02]"
+      src={src}
+      poster={poster}
+      muted
+      loop
+      playsInline
+      preload={active ? "auto" : "metadata"}
+      aria-hidden
+    />
+  );
+}
 
 function ModuleVideoModal({
   item,
@@ -18,6 +61,11 @@ function ModuleVideoModal({
   onClose: () => void;
 }) {
   const titleId = useId();
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const titleColor =
+    item.accent === "orange"
+      ? "text-[var(--orange)]"
+      : "text-[var(--blue-glow)]";
 
   useEffect(() => {
     const prev = document.body.style.overflow;
@@ -36,9 +84,20 @@ function ModuleVideoModal({
     };
   }, [onClose]);
 
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    const playPromise = video.play();
+    if (playPromise) {
+      playPromise.catch(() => {
+        /* usuário pode iniciar pelo controle nativo */
+      });
+    }
+  }, [item.video]);
+
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -50,55 +109,50 @@ function ModuleVideoModal({
       <button
         type="button"
         aria-label="Fechar modal"
-        className="absolute inset-0 bg-black/75 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/80 backdrop-blur-md"
         onClick={onClose}
       />
 
       <motion.div
-        initial={{ opacity: 0, y: 24, scale: 0.96 }}
+        initial={{ opacity: 0, y: 28, scale: 0.96 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: 16, scale: 0.96 }}
-        transition={{ type: "spring", stiffness: 320, damping: 28 }}
-        className="relative z-10 w-full max-w-3xl overflow-hidden rounded-2xl border border-white/10 bg-[#0a0f1a] shadow-[0_0_60px_rgba(47,107,255,0.25)]"
+        exit={{ opacity: 0, y: 18, scale: 0.97 }}
+        transition={{ type: "spring", stiffness: 340, damping: 30 }}
+        className="relative z-10 w-full max-w-[min(100%,380px)] overflow-hidden rounded-3xl border border-white/10 bg-[#070a10] shadow-[0_0_80px_rgba(47,107,255,0.22)]"
       >
-        <div className="flex items-start justify-between gap-3 border-b border-white/10 px-4 py-3.5 sm:gap-4 sm:px-5 sm:py-4">
-          <div className="min-w-0">
-            <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--blue-glow)] sm:text-xs">
-              Módulo {item.num}
-            </p>
-            <h3
-              id={titleId}
-              className="mt-1 text-base font-extrabold leading-snug text-white sm:text-lg"
-            >
-              {item.title}
-            </h3>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="shrink-0 rounded-full border border-white/15 bg-white/5 p-2.5 text-white/80 transition hover:bg-white/10 hover:text-white"
-            aria-label="Fechar"
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute right-3 top-3 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-black/55 text-white/90 backdrop-blur-md transition hover:bg-black/75 hover:text-white"
+          aria-label="Fechar"
+        >
+          <X className="h-4 w-4" />
+        </button>
+
+        <div className="relative aspect-[9/16] max-h-[min(78vh,760px)] w-full bg-black">
+          <video
+            ref={videoRef}
+            className="absolute inset-0 h-full w-full object-cover"
+            src={item.video}
+            poster={item.image}
+            controls
+            playsInline
+            preload="metadata"
           >
-            <X className="h-4 w-4" />
-          </button>
+            Seu navegador não suporta vídeo HTML5.
+          </video>
         </div>
 
-        {/* Área de vídeo — pronta para URL futura */}
-        <div className="relative aspect-video w-full bg-black">
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-[radial-gradient(circle_at_center,rgba(47,107,255,0.18),transparent_60%)] sm:gap-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full border border-[var(--blue)]/40 bg-[var(--blue)]/20 text-white shadow-[0_0_30px_rgba(47,107,255,0.35)] sm:h-16 sm:w-16">
-              <Play className="h-6 w-6 fill-white sm:h-7 sm:w-7" />
-            </div>
-            <div className="px-4 text-center sm:px-6">
-              <p className="text-sm font-semibold text-white sm:text-base">
-                Vídeo em breve
-              </p>
-              <p className="mt-1 max-w-md text-xs text-white/55 sm:text-sm">
-                {item.description} O player será conectado aqui quando o
-                conteúdo estiver disponível.
-              </p>
-            </div>
-          </div>
+        <div className="border-t border-white/10 bg-gradient-to-b from-[#0a0f1a] to-[#070a10] px-5 py-4 sm:px-6 sm:py-5">
+          <h3
+            id={titleId}
+            className={`text-base font-extrabold uppercase leading-snug tracking-wide sm:text-lg ${titleColor}`}
+          >
+            {item.title}
+          </h3>
+          <p className="mt-1.5 text-sm leading-relaxed text-white/60">
+            {item.description}
+          </p>
         </div>
       </motion.div>
     </motion.div>
@@ -110,6 +164,9 @@ export function Modules() {
   const [activeModule, setActiveModule] = useState<ModuleItem | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [visibleVideos, setVisibleVideos] = useState<Record<string, boolean>>(
+    {},
+  );
   const mobileGap = 12;
 
   const updateScrollState = useCallback(() => {
@@ -135,6 +192,30 @@ export function Modules() {
       window.removeEventListener("resize", updateScrollState);
     };
   }, [updateScrollState]);
+
+  useEffect(() => {
+    const root = scrollRef.current;
+    if (!root) return;
+
+    const cards = root.querySelectorAll<HTMLElement>("[data-module-video]");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        setVisibleVideos((prev) => {
+          const next = { ...prev };
+          for (const entry of entries) {
+            const key = entry.target.getAttribute("data-module-video");
+            if (!key) continue;
+            next[key] = entry.isIntersecting && entry.intersectionRatio > 0.45;
+          }
+          return next;
+        });
+      },
+      { root: null, threshold: [0, 0.45, 0.7] },
+    );
+
+    cards.forEach((card) => observer.observe(card));
+    return () => observer.disconnect();
+  }, [modules.items.length]);
 
   const scrollToIndex = (index: number) => {
     const el = scrollRef.current;
@@ -197,33 +278,58 @@ export function Modules() {
                 className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] sm:mx-0 sm:grid sm:grid-cols-3 sm:gap-3 sm:overflow-visible sm:px-0 sm:pb-0 sm:snap-none lg:gap-4 [&::-webkit-scrollbar]:hidden"
                 data-lenis-prevent-touch
               >
-                {modules.items.map((item, index) => (
-                  <motion.button
-                    key={item.num}
-                    type="button"
-                    onClick={() => setActiveModule(item)}
-                    initial={{ opacity: 0, y: 24 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.3 }}
-                    transition={{ duration: 0.45, delay: index * 0.1 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="group relative aspect-[2/3] w-[min(78vw,280px)] shrink-0 snap-center cursor-pointer overflow-hidden rounded-2xl border border-white/10 p-0 text-left outline-none focus-visible:ring-2 focus-visible:ring-[var(--blue-glow)] sm:w-auto sm:shrink sm:snap-start"
-                  >
-                    <Image
-                      src={item.image}
-                      alt={`${item.num} ${item.title}`}
-                      fill
-                      className="object-cover object-center transition-transform duration-500 ease-out group-hover:scale-110 group-active:scale-105"
-                      sizes="(max-width: 640px) 78vw, 33vw"
-                    />
-                    <span className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/45 opacity-100 transition-opacity duration-300 sm:bg-black/55 sm:opacity-0 sm:group-hover:opacity-100">
-                      <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/50 px-4 py-2 text-[11px] font-bold uppercase tracking-wide text-white backdrop-blur-md sm:bg-white/10 sm:px-5 sm:py-2.5 sm:text-xs">
-                        <Play className="h-3.5 w-3.5 fill-white" />
-                        Assistir
+                {modules.items.map((item, index) => {
+                  const titleColor =
+                    item.accent === "orange"
+                      ? "text-[var(--orange)]"
+                      : "text-[var(--blue-glow)]";
+                  const videoActive =
+                    !activeModule && (visibleVideos[item.num] ?? index < 3);
+
+                  return (
+                    <motion.button
+                      key={item.num}
+                      type="button"
+                      data-module-video={item.num}
+                      onClick={() => setActiveModule(item)}
+                      initial={{ opacity: 0, y: 24 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.3 }}
+                      transition={{ duration: 0.45, delay: index * 0.1 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="group relative flex aspect-[2/3] w-[min(78vw,280px)] shrink-0 snap-center cursor-pointer flex-col overflow-hidden rounded-2xl bg-[#070a10] p-0 text-left outline-none focus-visible:ring-2 focus-visible:ring-[var(--blue-glow)] sm:w-auto sm:shrink sm:snap-start"
+                    >
+                      <span className="relative block min-h-0 w-full flex-[1.35] overflow-hidden">
+                        <ModuleCardVideo
+                          src={item.video}
+                          poster={item.image}
+                          active={videoActive}
+                        />
                       </span>
-                    </span>
-                  </motion.button>
-                ))}
+
+                      <span className="relative z-10 flex flex-col gap-2 bg-gradient-to-t from-[#070a10] via-[#070a10] to-[#070a10]/92 px-4 pb-5 pt-3 sm:px-5 sm:pb-6">
+                        <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/5 text-xs font-bold text-white/70">
+                          {item.num}
+                        </span>
+                        <span
+                          className={`text-[0.95rem] font-extrabold uppercase leading-tight tracking-wide sm:text-base ${titleColor}`}
+                        >
+                          {item.title}
+                        </span>
+                        <span className="text-[12px] leading-snug text-white/70 sm:text-[13px]">
+                          {item.description}
+                        </span>
+                      </span>
+
+                      <span className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center bg-black/35 opacity-100 transition-opacity duration-300 sm:bg-black/45 sm:opacity-0 sm:group-hover:opacity-100">
+                        <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/50 px-4 py-2 text-[11px] font-bold uppercase tracking-wide text-white backdrop-blur-md sm:bg-white/10 sm:px-5 sm:py-2.5 sm:text-xs">
+                          <Play className="h-3.5 w-3.5 fill-white" />
+                          Assistir
+                        </span>
+                      </span>
+                    </motion.button>
+                  );
+                })}
               </div>
 
               <div className="mt-4 flex items-center justify-center gap-2 sm:hidden">

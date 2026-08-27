@@ -20,8 +20,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={`${plusJakarta.variable} h-full antialiased`}>
-      <body className="min-h-full font-sans">
+    <html lang="pt-BR" className={`${plusJakarta.variable} antialiased`}>
+      <body className="min-h-dvh font-sans">
         <SmoothScroll />
         <JsonLd />
         {children}

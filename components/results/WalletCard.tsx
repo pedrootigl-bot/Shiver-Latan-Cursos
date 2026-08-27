@@ -7,7 +7,7 @@ import type { WalletCardData } from "@/lib/content";
 export function WalletCard({ data }: { data: WalletCardData }) {
   return (
     <article className="relative flex h-full flex-col rounded-2xl border border-white/[0.08] bg-[#101318] p-3 shadow-[0_8px_32px_rgba(0,0,0,0.4)]">
-      <div className="mx-auto w-full max-w-[200px] overflow-hidden rounded-[20px] border border-white/10 bg-black shadow-[0_0_40px_rgba(0,102,255,0.12)]">
+      <div className="mx-auto w-full max-w-[200px] overflow-hidden rounded-[20px] border border-white/10 bg-black">
         <PhoneStatusBar time={data.time} />
 
         <div className="bg-gradient-to-b from-[#0a1220] to-[#050608] px-3 pb-4 pt-2">

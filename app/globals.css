@@ -23,14 +23,15 @@
 html {
   /* Lenis controla a suavização; evita dupla interpolação com CSS */
   scroll-behavior: auto;
-  overflow-x: hidden;
+  /* clip não força overflow-y:auto (hidden no html+body = duas barras) */
+  overflow-x: clip;
 }
 
 body {
   background: var(--bg);
   color: var(--foreground);
   font-family: var(--font-plus-jakarta), system-ui, sans-serif;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* Utilitário para futuras seções: fade suave entre blocos */
