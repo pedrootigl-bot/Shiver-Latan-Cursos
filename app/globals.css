@@ -21,13 +21,16 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  /* Lenis controla a suavização; evita dupla interpolação com CSS */
+  scroll-behavior: auto;
+  overflow-x: hidden;
 }
 
 body {
   background: var(--bg);
   color: var(--foreground);
   font-family: var(--font-plus-jakarta), system-ui, sans-serif;
+  overflow-x: hidden;
 }
 
 /* Utilitário para futuras seções: fade suave entre blocos */

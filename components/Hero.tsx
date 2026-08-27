@@ -13,9 +13,9 @@ function PairFlags({ codes }: { codes: readonly string[] }) {
       {codes.map((code, index) => (
         <span
           key={`${code}-${index}`}
-          className="relative h-6 w-6 overflow-hidden rounded-full border-2 border-[#111] bg-[#222]"
+          className="relative h-5 w-5 overflow-hidden rounded-full border-2 border-[#111] bg-[#222] sm:h-6 sm:w-6"
           style={{
-            marginLeft: index === 0 ? 0 : -7,
+            marginLeft: index === 0 ? 0 : -6,
             zIndex: codes.length - index,
           }}
         >
@@ -38,10 +38,14 @@ export function Hero() {
   const { headline, subheadline } = hero;
 
   return (
-    <section className="relative min-h-[100svh] overflow-hidden bg-black pt-12 pb-28 lg:pt-16 lg:pb-36" id="inicio" aria-label="Apresentação do curso">
-      <div className="relative mx-auto grid max-w-7xl items-center gap-8 px-6 lg:grid-cols-[1.05fr_0.95fr] lg:grid-rows-[auto_auto] lg:gap-x-6 lg:gap-y-7 lg:px-10">
+    <section
+      className="relative overflow-hidden bg-black pt-8 pb-20 sm:min-h-[100svh] sm:pt-12 sm:pb-28 lg:pt-16 lg:pb-36"
+      id="inicio"
+      aria-label="Apresentação do curso"
+    >
+      <div className="relative mx-auto grid max-w-7xl items-center gap-6 px-4 sm:gap-8 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:grid-rows-[auto_auto] lg:gap-x-6 lg:gap-y-7 lg:px-10">
         <motion.div
-          className="relative z-10 order-1 flex flex-col items-start gap-5 lg:col-start-1 lg:row-start-1"
+          className="relative z-10 order-1 flex flex-col items-start gap-4 sm:gap-5 lg:col-start-1 lg:row-start-1"
           variants={staggerContainer}
           initial="hidden"
           animate="visible"
@@ -49,7 +53,7 @@ export function Hero() {
           <motion.h1
             variants={fadeUp}
             transition={{ duration: 0.65, ease: easeOut }}
-            className="max-w-xl text-[2.1rem] font-extrabold leading-[1.12] tracking-tight text-white sm:text-5xl lg:text-[3.15rem]"
+            className="max-w-xl text-[1.85rem] font-extrabold leading-[1.15] tracking-tight text-white sm:text-5xl lg:text-[3.15rem]"
           >
             {headline.before}
             <span className="text-[var(--blue-glow)]">{headline.highlightGreen}</span>
@@ -62,7 +66,7 @@ export function Hero() {
           <motion.p
             variants={fadeUp}
             transition={{ duration: 0.6, ease: easeOut }}
-            className="max-w-md text-base leading-relaxed text-white/90 sm:text-lg"
+            className="max-w-md text-[0.95rem] leading-relaxed text-white/90 sm:text-lg"
           >
             {subheadline.before}
             <span className="font-semibold text-[var(--orange)]">
@@ -75,8 +79,8 @@ export function Hero() {
           </motion.p>
         </motion.div>
 
-        <div className="relative order-2 mx-auto w-full max-w-[600px] lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:mx-0 lg:max-w-none">
-          <div className="relative mx-auto aspect-[4/5] w-full max-w-[560px]">
+        <div className="relative order-2 mx-auto w-full max-w-[420px] sm:max-w-[600px] lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:mx-0 lg:max-w-none">
+          <div className="relative mx-auto aspect-[3/4] w-full max-w-[560px] sm:aspect-[4/5]">
             <motion.div
               className="absolute inset-0"
               initial={{ opacity: 0, scale: 0.96, y: 16 }}
@@ -96,7 +100,7 @@ export function Hero() {
 
             {/* Cards de ativos (pares) — mobile: esq/baixo | desktop: dir/cima */}
             <motion.div
-              className="absolute bottom-[12%] left-0 z-20 flex w-[min(100%,210px)] flex-col gap-2 sm:-left-2 lg:bottom-auto lg:left-auto lg:right-0 lg:top-[8%] lg:-right-6"
+              className="absolute bottom-[10%] left-0 z-20 flex w-[min(72%,168px)] scale-[0.92] origin-bottom-left flex-col gap-1.5 sm:bottom-[12%] sm:w-[min(100%,210px)] sm:scale-100 sm:gap-2 sm:-left-2 lg:bottom-auto lg:left-auto lg:right-0 lg:top-[8%] lg:origin-top-right lg:-right-6"
               initial={{ opacity: 0, x: -24 }}
               animate={{ opacity: 1, x: 0, y: [0, -8, 0] }}
               transition={{
@@ -116,14 +120,14 @@ export function Hero() {
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.25 + index * 0.12, duration: 0.4 }}
-                  className="flex items-center gap-2 rounded-xl border border-white/10 bg-[#1a1a1a]/95 px-2.5 py-2 shadow-[0_8px_30px_rgba(0,0,0,0.45)] backdrop-blur-md"
+                  className="flex items-center gap-1.5 rounded-xl border border-white/10 bg-[#1a1a1a]/95 px-2 py-1.5 shadow-[0_8px_30px_rgba(0,0,0,0.45)] backdrop-blur-md sm:gap-2 sm:px-2.5 sm:py-2"
                 >
                   <PairFlags codes={item.flags} />
-                  <span className="flex-1 text-xs font-semibold text-white">
+                  <span className="flex-1 text-[10px] font-semibold text-white sm:text-xs">
                     {item.pair}
                   </span>
-                  <ArrowUp className="h-3.5 w-3.5 text-[var(--green)]" strokeWidth={2.5} />
-                  <span className="min-w-[2.5rem] text-right text-sm font-bold text-[var(--green)]">
+                  <ArrowUp className="h-3 w-3 text-[var(--green)] sm:h-3.5 sm:w-3.5" strokeWidth={2.5} />
+                  <span className="min-w-[2rem] text-right text-xs font-bold text-[var(--green)] sm:min-w-[2.5rem] sm:text-sm">
                     {item.pct}
                   </span>
                 </motion.div>
@@ -132,7 +136,7 @@ export function Hero() {
 
             {/* Cards Compra / Venta — mobile: dir/cima | desktop: esq/baixo */}
             <motion.div
-              className="absolute top-[10%] right-0 z-20 flex flex-col gap-2 sm:-right-2 lg:top-auto lg:right-auto lg:bottom-[26%] lg:left-0 lg:-left-8"
+              className="absolute top-[8%] right-0 z-20 flex scale-[0.92] origin-top-right flex-col gap-1.5 sm:top-[10%] sm:scale-100 sm:gap-2 sm:-right-2 lg:top-auto lg:right-auto lg:bottom-[26%] lg:left-0 lg:origin-bottom-left lg:-left-8"
               initial={{ opacity: 0, x: 24 }}
               animate={{ opacity: 1, x: 0, y: [0, 8, 0] }}
               transition={{
@@ -146,16 +150,16 @@ export function Hero() {
                 },
               }}
             >
-              <div className="inline-flex items-center gap-2 rounded-lg bg-[var(--green)] px-3.5 py-2 text-sm font-bold text-black shadow-[0_0_20px_rgba(57,255,20,0.45)]">
+              <div className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--green)] px-2.5 py-1.5 text-xs font-bold text-black shadow-[0_0_20px_rgba(57,255,20,0.45)] sm:gap-2 sm:px-3.5 sm:py-2 sm:text-sm">
                 Compra
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-black/15">
-                  <ArrowUp className="h-3.5 w-3.5" strokeWidth={3} />
+                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-black/15 sm:h-5 sm:w-5">
+                  <ArrowUp className="h-3 w-3 sm:h-3.5 sm:w-3.5" strokeWidth={3} />
                 </span>
               </div>
-              <div className="inline-flex items-center gap-2 rounded-lg bg-[var(--red)] px-3.5 py-2 text-sm font-bold text-white shadow-[0_0_20px_rgba(225,29,46,0.45)]">
+              <div className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--red)] px-2.5 py-1.5 text-xs font-bold text-white shadow-[0_0_20px_rgba(225,29,46,0.45)] sm:gap-2 sm:px-3.5 sm:py-2 sm:text-sm">
                 Venta
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/15">
-                  <ArrowDown className="h-3.5 w-3.5" strokeWidth={3} />
+                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white/15 sm:h-5 sm:w-5">
+                  <ArrowDown className="h-3 w-3 sm:h-3.5 sm:w-3.5" strokeWidth={3} />
                 </span>
               </div>
             </motion.div>
@@ -173,7 +177,7 @@ export function Hero() {
           <Button
             variant="blue"
             href={ctaUrl}
-            className="w-full max-w-md border-2 border-[#0033aa] px-8 py-4 text-base shadow-[0_0_28px_rgba(0,102,255,0.55)] sm:w-auto"
+            className="min-h-12 w-full max-w-md border-2 border-[#0033aa] px-6 py-3.5 text-sm shadow-[0_0_28px_rgba(0,102,255,0.55)] sm:w-auto sm:px-8 sm:py-4 sm:text-base"
           >
             <Star className="h-4 w-4 fill-white" />
             {hero.ctaLabel}
@@ -181,14 +185,13 @@ export function Hero() {
         </motion.div>
       </div>
 
-      {/* Transição natural para a próxima section */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent via-[#05070a]/55 to-[#05070a] sm:h-48 lg:h-56"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-b from-transparent via-[#05070a]/55 to-[#05070a] sm:h-48 lg:h-56"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-[radial-gradient(ellipse_at_center_bottom,rgba(47,107,255,0.14),transparent_70%)]"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-[radial-gradient(ellipse_at_center_bottom,rgba(47,107,255,0.14),transparent_70%)] sm:h-32"
       />
     </section>
   );

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { JsonLd } from "@/components/JsonLd";
+import { SmoothScroll } from "@/components/SmoothScroll";
 import { buildMetadata } from "@/lib/seo";
 import "./globals.css";
 
@@ -21,6 +22,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={`${plusJakarta.variable} h-full antialiased`}>
       <body className="min-h-full font-sans">
+        <SmoothScroll />
         <JsonLd />
         {children}
       </body>
