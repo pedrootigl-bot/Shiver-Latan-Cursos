@@ -38,10 +38,10 @@ export function Hero() {
   const { headline, subheadline } = hero;
 
   return (
-    <section className="relative min-h-[100svh] overflow-hidden bg-black pt-12 pb-28 lg:pt-16 lg:pb-36">
-      <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-6 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6 lg:px-10">
+    <section className="relative min-h-[100svh] overflow-hidden bg-black pt-12 pb-28 lg:pt-16 lg:pb-36" id="inicio" aria-label="Apresentação do curso">
+      <div className="relative mx-auto grid max-w-7xl items-center gap-8 px-6 lg:grid-cols-[1.05fr_0.95fr] lg:grid-rows-[auto_auto] lg:gap-x-6 lg:gap-y-7 lg:px-10">
         <motion.div
-          className="relative z-10 flex flex-col items-start gap-7"
+          className="relative z-10 order-1 flex flex-col items-start gap-5 lg:col-start-1 lg:row-start-1"
           variants={staggerContainer}
           initial="hidden"
           animate="visible"
@@ -73,25 +73,9 @@ export function Hero() {
               {subheadline.highlightGreen}
             </span>
           </motion.p>
-
-          <motion.div
-            variants={fadeUp}
-            transition={{ duration: 0.55, ease: easeOut }}
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <Button
-              variant="blue"
-              href={ctaUrl}
-              className="mt-1 border-2 border-[#0033aa] px-8 py-4 text-base shadow-[0_0_28px_rgba(0,102,255,0.55)]"
-            >
-              <Star className="h-4 w-4 fill-white" />
-              {hero.ctaLabel}
-            </Button>
-          </motion.div>
         </motion.div>
 
-        <div className="relative mx-auto w-full max-w-[600px] lg:max-w-none">
+        <div className="relative order-2 mx-auto w-full max-w-[600px] lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:mx-0 lg:max-w-none">
           <div className="relative mx-auto aspect-[4/5] w-full max-w-[560px]">
             <motion.div
               className="absolute inset-0"
@@ -110,10 +94,10 @@ export function Hero() {
               />
             </motion.div>
 
-            {/* Cards de ativos (pares) — acima da imagem */}
+            {/* Cards de ativos (pares) — mobile: esq/baixo | desktop: dir/cima */}
             <motion.div
-              className="absolute top-[8%] right-0 z-20 flex w-[min(100%,210px)] flex-col gap-2 sm:-right-2 lg:-right-6"
-              initial={{ opacity: 0, x: 24 }}
+              className="absolute bottom-[12%] left-0 z-20 flex w-[min(100%,210px)] flex-col gap-2 sm:-left-2 lg:bottom-auto lg:left-auto lg:right-0 lg:top-[8%] lg:-right-6"
+              initial={{ opacity: 0, x: -24 }}
               animate={{ opacity: 1, x: 0, y: [0, -8, 0] }}
               transition={{
                 opacity: { duration: 0.5 },
@@ -146,10 +130,10 @@ export function Hero() {
               ))}
             </motion.div>
 
-            {/* Cards Comprar / Vender — acima da imagem */}
+            {/* Cards Compra / Venta — mobile: dir/cima | desktop: esq/baixo */}
             <motion.div
-              className="absolute bottom-[26%] left-0 z-20 flex flex-col gap-2 sm:-left-2 lg:-left-8"
-              initial={{ opacity: 0, x: -24 }}
+              className="absolute top-[10%] right-0 z-20 flex flex-col gap-2 sm:-right-2 lg:top-auto lg:right-auto lg:bottom-[26%] lg:left-0 lg:-left-8"
+              initial={{ opacity: 0, x: 24 }}
               animate={{ opacity: 1, x: 0, y: [0, 8, 0] }}
               transition={{
                 opacity: { duration: 0.5, delay: 0.15 },
@@ -177,6 +161,24 @@ export function Hero() {
             </motion.div>
           </div>
         </div>
+
+        <motion.div
+          className="relative z-10 order-3 flex justify-center lg:col-start-1 lg:row-start-2 lg:justify-start"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, ease: easeOut, delay: 0.35 }}
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <Button
+            variant="blue"
+            href={ctaUrl}
+            className="w-full max-w-md border-2 border-[#0033aa] px-8 py-4 text-base shadow-[0_0_28px_rgba(0,102,255,0.55)] sm:w-auto"
+          >
+            <Star className="h-4 w-4 fill-white" />
+            {hero.ctaLabel}
+          </Button>
+        </motion.div>
       </div>
 
       {/* Transição natural para a próxima section */}

@@ -27,7 +27,6 @@ export const content = {
     title: "Aprenda com um método completo e objetivo.",
     description:
       "Módulos práticos que vão do básico ao avançado para transformar conhecimento em resultado real.",
-    ctaLabel: "VER TODOS OS MÓDULOS",
     items: [
       {
         num: "01",
@@ -51,10 +50,6 @@ export const content = {
         image: "/images/module-mercado.png",
       },
     ],
-    morePrefix: "E MAIS",
-    moreHighlight: "+17 MÓDULOS",
-    moreTopics:
-      "estratégias, price action, gerenciamento de risco, operações avançadas e muito mais.",
     cardsHint: "Clique nos cards para ver o conteúdo",
   },
   results: {

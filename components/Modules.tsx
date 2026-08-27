@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useId, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, Play, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Play, X } from "lucide-react";
 import { content } from "@/lib/content";
-import { Button } from "@/components/ui/Button";
 import { easeOut, fadeUp, staggerContainer, viewportOnce } from "@/lib/motion";
 
 type ModuleItem = (typeof content.modules.items)[number];
@@ -102,10 +101,54 @@ function ModuleVideoModal({
 export function Modules() {
   const { modules } = content;
   const [activeModule, setActiveModule] = useState<ModuleItem | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const updateScrollState = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const cardWidth = el.firstElementChild?.clientWidth ?? 0;
+    const gap = 16;
+    const index = Math.round(el.scrollLeft / Math.max(cardWidth + gap, 1));
+    setActiveIndex(Math.min(index, modules.items.length - 1));
+    setCanScrollLeft(el.scrollLeft > 8);
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 8);
+  }, [modules.items.length]);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    updateScrollState();
+    el.addEventListener("scroll", updateScrollState, { passive: true });
+    window.addEventListener("resize", updateScrollState);
+    return () => {
+      el.removeEventListener("scroll", updateScrollState);
+      window.removeEventListener("resize", updateScrollState);
+    };
+  }, [updateScrollState]);
+
+  const scrollTo = (direction: -1 | 1) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const cardWidth = el.firstElementChild?.clientWidth ?? 260;
+    el.scrollBy({ left: direction * (cardWidth + 16), behavior: "smooth" });
+  };
+
+  const scrollToIndex = (index: number) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const cardWidth = el.firstElementChild?.clientWidth ?? 260;
+    el.scrollTo({ left: index * (cardWidth + 16), behavior: "smooth" });
+  };
 
   return (
     <section
       id={modules.id}
+      aria-labelledby="modulos-titulo"
       className="section-fade-top section-fade-bottom relative -mt-24 overflow-hidden bg-[#05070a] pb-28 pt-36 lg:-mt-32 lg:pb-36 lg:pt-44"
     >
       <div
@@ -130,6 +173,7 @@ export function Modules() {
               {modules.eyebrow}
             </motion.p>
             <motion.h2
+              id="modulos-titulo"
               variants={fadeUp}
               transition={{ duration: 0.55, ease: easeOut }}
               className="max-w-md text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl"
@@ -143,52 +187,78 @@ export function Modules() {
             >
               {modules.description}
             </motion.p>
-            <motion.div
-              variants={fadeUp}
-              transition={{ duration: 0.5, ease: easeOut }}
-              whileHover={{ scale: 1.03, x: 4 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <Button
-                variant="outline"
-                href={`#${modules.id}`}
-                className="mt-2 border-[var(--blue-glow)] text-[var(--blue-glow)]"
-              >
-                {modules.ctaLabel}
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </motion.div>
           </motion.div>
 
           <div className="flex min-w-0 flex-col gap-5">
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-3 lg:gap-4">
-              {modules.items.map((item, index) => (
-                <motion.button
-                  key={item.num}
-                  type="button"
-                  onClick={() => setActiveModule(item)}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.3 }}
-                  transition={{ duration: 0.45, delay: index * 0.1 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="group relative aspect-[2/3] w-full cursor-pointer overflow-hidden rounded-2xl border border-white/10 p-0 text-left outline-none focus-visible:ring-2 focus-visible:ring-[var(--blue-glow)]"
-                >
-                  <Image
-                    src={item.image}
-                    alt={`${item.num} ${item.title}`}
-                    fill
-                    className="object-cover object-center transition-transform duration-500 ease-out group-hover:scale-110"
-                    sizes="(max-width: 640px) 100vw, 33vw"
-                  />
-                  <span className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/55 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                    <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-2.5 text-xs font-bold uppercase tracking-wide text-white backdrop-blur-md">
-                      <Play className="h-3.5 w-3.5 fill-white" />
-                      Assistir
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => scrollTo(-1)}
+                disabled={!canScrollLeft}
+                aria-label="Módulo anterior"
+                className="absolute -left-1 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[var(--blue-glow)]/35 bg-[#0f1218]/90 text-[var(--blue-glow)] shadow-lg backdrop-blur-sm transition hover:border-[var(--blue-glow)]/60 disabled:pointer-events-none disabled:opacity-30 sm:hidden"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => scrollTo(1)}
+                disabled={!canScrollRight}
+                aria-label="Próximo módulo"
+                className="absolute -right-1 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[var(--blue-glow)]/35 bg-[#0f1218]/90 text-[var(--blue-glow)] shadow-lg backdrop-blur-sm transition hover:border-[var(--blue-glow)]/60 disabled:pointer-events-none disabled:opacity-30 sm:hidden"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+
+              <div
+                ref={scrollRef}
+                className="-mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] sm:mx-0 sm:grid sm:grid-cols-3 sm:gap-3 sm:overflow-visible sm:px-0 sm:pb-0 sm:snap-none lg:gap-4 [&::-webkit-scrollbar]:hidden"
+              >
+                {modules.items.map((item, index) => (
+                  <motion.button
+                    key={item.num}
+                    type="button"
+                    onClick={() => setActiveModule(item)}
+                    initial={{ opacity: 0, y: 24 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.3 }}
+                    transition={{ duration: 0.45, delay: index * 0.1 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="group relative aspect-[2/3] w-[min(72vw,260px)] shrink-0 snap-start cursor-pointer overflow-hidden rounded-2xl border border-white/10 p-0 text-left outline-none focus-visible:ring-2 focus-visible:ring-[var(--blue-glow)] sm:w-auto sm:shrink"
+                  >
+                    <Image
+                      src={item.image}
+                      alt={`${item.num} ${item.title}`}
+                      fill
+                      className="object-cover object-center transition-transform duration-500 ease-out group-hover:scale-110"
+                      sizes="(max-width: 640px) 72vw, 33vw"
+                    />
+                    <span className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/55 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                      <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-2.5 text-xs font-bold uppercase tracking-wide text-white backdrop-blur-md">
+                        <Play className="h-3.5 w-3.5 fill-white" />
+                        Assistir
+                      </span>
                     </span>
-                  </span>
-                </motion.button>
-              ))}
+                  </motion.button>
+                ))}
+              </div>
+
+              <div className="mt-4 flex items-center justify-center gap-2 sm:hidden">
+                {modules.items.map((item, index) => (
+                  <button
+                    key={`dot-${item.num}`}
+                    type="button"
+                    aria-label={`Ir para módulo ${item.num}`}
+                    onClick={() => scrollToIndex(index)}
+                    className={`h-2 rounded-full transition-all ${
+                      activeIndex === index
+                        ? "w-6 bg-[var(--blue-glow)]"
+                        : "w-2 bg-white/20 hover:bg-white/35"
+                    }`}
+                  />
+                ))}
+              </div>
             </div>
 
             <motion.p
@@ -200,19 +270,6 @@ export function Modules() {
             >
               {modules.cardsHint}
             </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={viewportOnce}
-              transition={{ duration: 0.5, delay: 0.3, ease: easeOut }}
-              className="rounded-2xl border border-white/10 bg-[#0a0f1a]/80 px-4 py-4 text-center text-sm leading-relaxed text-white/60 sm:px-5 sm:text-base"
-            >
-              <span className="font-bold text-[var(--blue-glow)]">
-                {modules.morePrefix} {modules.moreHighlight}
-              </span>
-              <span>: {modules.moreTopics}</span>
-            </motion.div>
           </div>
         </div>
       </div>

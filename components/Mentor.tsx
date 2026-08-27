@@ -25,33 +25,13 @@ export function Mentor() {
   return (
     <section
       id={mentor.id}
+      aria-labelledby="mentor-titulo"
       className="section-fade-top relative overflow-hidden bg-[#05070a] py-1 lg:py-1.5"
     >
       <div className="grid lg:grid-cols-2 lg:items-stretch">
+        {/* Textos — mobile 1º | desktop coluna direita */}
         <motion.div
-          initial={{ opacity: 0, x: -40 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={viewportOnce}
-          transition={{ duration: 0.7, ease: easeOut }}
-          className="relative min-h-[560px] w-full self-stretch overflow-hidden rounded-r-2xl border-y border-r border-[var(--orange)]/40 sm:min-h-[640px] lg:min-h-0 lg:h-full"
-        >
-          <Image
-            src={mentor.image}
-            alt={mentor.name}
-            fill
-            quality={95}
-            className="object-cover object-[center_20%]"
-            sizes="(max-width: 1024px) 100vw, 50vw"
-            priority={false}
-          />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#05070a]/40 via-transparent to-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-[#05070a]/50"
-          />
-        </motion.div>
-
-        <motion.div
-          className="relative flex flex-col justify-center px-6 py-14 sm:px-10 lg:max-w-none lg:px-12 lg:py-20 xl:px-16"
+          className="relative order-1 flex flex-col justify-center px-6 pb-4 pt-12 sm:px-10 sm:pt-14 lg:order-2 lg:px-12 lg:py-20 xl:px-16"
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
@@ -66,6 +46,7 @@ export function Mentor() {
           </motion.p>
 
           <motion.h2
+            id="mentor-titulo"
             variants={fadeUp}
             transition={{ duration: 0.55, ease: easeOut }}
             className="mt-4 text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl lg:text-[2.75rem]"
@@ -118,10 +99,11 @@ export function Mentor() {
             {mentor.bioClosing}
           </motion.p>
 
+          {/* CTA no fluxo do texto só no desktop */}
           <motion.div
             variants={fadeLeft}
             transition={{ duration: 0.5, ease: easeOut }}
-            className="mt-8"
+            className="mt-8 hidden lg:block"
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -134,6 +116,49 @@ export function Mentor() {
               <ArrowRight className="h-4 w-4" />
             </Button>
           </motion.div>
+        </motion.div>
+
+        {/* Imagem — mobile 2º (após textos) | desktop esquerda full-height */}
+        <motion.div
+          initial={{ opacity: 0, x: -40 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={viewportOnce}
+          transition={{ duration: 0.7, ease: easeOut }}
+          className="relative order-2 min-h-[480px] w-full self-stretch overflow-hidden rounded-r-2xl border-y border-r border-[var(--orange)]/40 sm:min-h-[560px] lg:order-1 lg:min-h-0 lg:h-full"
+        >
+          <Image
+            src={mentor.image}
+            alt={mentor.name}
+            fill
+            quality={95}
+            className="object-cover object-[center_20%]"
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            priority={false}
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#05070a]/40 via-transparent to-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-[#05070a]/50"
+          />
+        </motion.div>
+
+        {/* CTA mobile — após a imagem */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={viewportOnce}
+          transition={{ duration: 0.45, ease: easeOut }}
+          className="order-3 px-6 pb-12 pt-6 sm:px-10 lg:hidden"
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <Button
+            variant="orange"
+            href={content.ctaUrl}
+            className="w-full rounded-xl px-7 py-3.5"
+          >
+            {mentor.ctaLabel}
+            <ArrowRight className="h-4 w-4" />
+          </Button>
         </motion.div>
       </div>
     </section>

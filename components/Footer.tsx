@@ -10,7 +10,10 @@ export function Footer() {
   const { brand, footer } = content;
 
   return (
-    <footer className="border-t border-white/[0.06] bg-[#05070a]">
+    <footer
+      aria-label="Rodapé do site"
+      className="border-t border-white/[0.06] bg-[#05070a]"
+    >
       <motion.div
         className="mx-auto max-w-7xl px-6 py-12 lg:px-10 lg:py-14"
         initial={{ opacity: 0, y: 24 }}

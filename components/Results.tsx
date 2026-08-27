@@ -75,6 +75,7 @@ export function Results() {
   return (
     <section
       id={results.id}
+      aria-labelledby="resultados-titulo"
       className="section-fade-top relative overflow-hidden bg-[#0b0d11] pb-16 pt-14 lg:pb-24 lg:pt-20"
     >
       <motion.div
@@ -97,7 +98,10 @@ export function Results() {
             {results.badge}
           </span>
 
-          <h2 className="mt-5 text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl lg:text-[2.75rem]">
+          <h2
+            id="resultados-titulo"
+            className="mt-5 text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl lg:text-[2.75rem]"
+          >
             {results.titleBefore}{" "}
             <span className="text-[var(--blue-soft)]">
               {results.titleHighlight}
