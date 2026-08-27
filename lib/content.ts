@@ -34,6 +34,7 @@ export const content = {
         description: "Assista agora e veja o método de gestão que protege seu capital em cada operação.",
         accent: "blue" as const,
         image: "/images/module-gestao-art.png",
+        preview: "/videos/module-01-gestao-preview.mp4",
         video: "/videos/module-01-gestao.mp4",
       },
       {
@@ -42,6 +43,7 @@ export const content = {
         description: "Toque para assistir: o mindset que separa quem opera no emocional de quem opera no lucro.",
         accent: "orange" as const,
         image: "/images/module-mindset-art.png",
+        preview: "/videos/module-02-mindset-preview.mp4",
         video: "/videos/module-02-mindset.mp4",
       },
       {
@@ -50,6 +52,7 @@ export const content = {
         description: "Veja no vídeo como ler o mercado e enxergar oportunidades reais, sem enrolação.",
         accent: "blue" as const,
         image: "/images/module-mercado-art.png",
+        preview: "/videos/module-03-mercado-preview.mp4",
         video: "/videos/module-03-mercado.mp4",
       },
     ],

@@ -137,7 +137,7 @@ function ModuleVideoModal({
             poster={item.image}
             controls
             playsInline
-            preload="metadata"
+            preload="none"
           >
             Seu navegador não suporta vídeo HTML5.
           </video>
@@ -301,7 +301,7 @@ export function Modules() {
                     >
                       <span className="relative block min-h-0 w-full flex-[1.35] overflow-hidden">
                         <ModuleCardVideo
-                          src={item.video}
+                          src={item.preview}
                           poster={item.image}
                           active={videoActive}
                         />
