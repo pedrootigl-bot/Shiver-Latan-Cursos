@@ -1,37 +1,58 @@
 export const content = {
   brand: { name: "El Mentor Trader", logoText: "elmentortrader", logoMark: "em" },
-  ctaUrl: "#",
+  ctaUrl: "https://t.me/ElMentorTrader_bot?start=-uflow__main",
   hero: {
     headline: {
-      before: "O melhor curso ",
-      highlightGreen: "completo",
-      middle: " de Opções Binárias do zero ao lucro ",
-      highlightOrange: "+ Sala de sinais ao vivo.",
+      line1: "Opera con más claridad",
+      line2: "junto a",
+      highlight: "EL MENTOR TRADER",
     },
-    subheadline: {
-      before: "Vou pegar na sua mão e te guiar pra você ",
-      highlightOrange: "não perder dinheiro",
-      middle: " e aprender as ",
-      highlightGreen: "melhores estratégias.",
-    },
-    ctaLabel: "GARANTIR MINHA VAGA",
+    paragraphs: [
+      {
+        text: "Más de 6 años de experiencia en el mercado de inversiones, con los últimos 4 años enfocados exclusivamente en criptomonedas y activos monetarios, analizando movimientos en pares como EUR/USD, GBP/USD y otros mercados de alta oportunidad.",
+        highlights: ["6 años", "4 años", "criptomonedas", "EUR/USD", "GBP/USD"],
+      },
+      {
+        text: "Acompaña mis análisis diarios, entiende los movimientos más importantes del mercado y da tus primeros pasos — o mejora tus resultados — con una guía mucho más clara y objetiva.",
+        highlights: ["análisis diarios"],
+      },
+    ],
+    ctaLabel: "ENTRAR A EL MENTOR TRADER",
+    supportText: "Acceso limitado · Pocas plazas disponibles este mes",
     pairs: [
-      { pair: "EUR/GBP", pct: "+87%", flags: ["eu", "gb"] },
       { pair: "EUR/USD", pct: "+90%", flags: ["eu", "us"] },
+      { pair: "GBP/USD", pct: "+87%", flags: ["gb", "us"] },
       { pair: "GBP/JPY", pct: "+89%", flags: ["gb", "jp"] },
     ],
   },
   modules: {
     id: "modulos",
-    eyebrow: "AULAS EM VÍDEO",
-    title: "Assista e entenda o método na prática.",
-    description:
-      "Toque nos cards e veja, em poucos minutos, como gestão, mindset e mercado se conectam no dia a dia do trader.",
+    eyebrow: "TESTIMONIOS EN VÍDEO",
+    title: "Lo que dicen algunos de nuestros alumnos",
+    paragraphs: [
+      {
+        text: "Durante todos estos años, ya he ayudado a más de 2.300 alumnos a dar un paso real en el trading.",
+        highlights: ["2.300 alumnos"],
+      },
+      {
+        text: "Muchos llegaron sin saber por dónde empezar.",
+        highlights: [],
+      },
+      {
+        text: "Otros ya operaban, pero seguían confundidos, entrando tarde o sin criterio.",
+        highlights: [],
+      },
+      {
+        text: "Hoy, acompañando mis análisis diariamente, lograron desarrollar una visión mucho más clara del mercado y avanzar como traders de verdad.",
+        highlights: ["análisis diariamente", "traders de verdad"],
+      },
+    ],
+    ctaLabel: "VER TESTIMONIOS",
     items: [
       {
         num: "01",
-        title: "COMO NÃO QUEIMAR A BANCA",
-        description: "Assista agora e veja o método de gestão que protege seu capital em cada operação.",
+        title: "TESTIMONIO 01",
+        description: "Cómo comenzó su proceso dentro de la mentoría.",
         accent: "blue" as const,
         image: "/images/module-gestao-art.png",
         preview: "/videos/module-01-gestao-preview.mp4",
@@ -39,8 +60,9 @@ export const content = {
       },
       {
         num: "02",
-        title: "A MENTE DE QUEM LUCRA",
-        description: "Toque para assistir: o mindset que separa quem opera no emocional de quem opera no lucro.",
+        title: "TESTIMONIO 02",
+        description:
+          "Qué cambió después de empezar a seguir los análisis diarios.",
         accent: "orange" as const,
         image: "/images/module-mindset-art.png",
         preview: "/videos/module-02-mindset-preview.mp4",
@@ -48,25 +70,37 @@ export const content = {
       },
       {
         num: "03",
-        title: "MERCADO NA PRÁTICA",
-        description: "Veja no vídeo como ler o mercado e enxergar oportunidades reais, sem enrolação.",
+        title: "TESTIMONIO 03",
+        description: "Cómo pasó de la duda a una lectura más clara del mercado.",
         accent: "blue" as const,
         image: "/images/module-mercado-art.png",
         preview: "/videos/module-03-mercado-preview.mp4",
         video: "/videos/module-03-mercado.mp4",
       },
     ],
-    cardsHint: "Toque no card para assistir o vídeo",
+    cardsHint: "Toca la tarjeta para ver el testimonio",
+    playLabel: "Ver testimonio",
+    galleryTapHint: "Toca la tarjeta para ver el testimonio",
   },
   results: {
     id: "resultados",
-    badge: "RESULTADOS REAIS",
-    titleBefore: "Resultados reais dos nossos",
-    titleHighlight: "alunos",
-    description: [
-      "Sinais, operações e resultados ao vivo da nossa Sala de Sinais.",
-      "Transparência total. Resultados que falam por si.",
+    badge: "ACCESOS A LA SALA",
+    title: "Mira algunos accesos a mi sala",
+    paragraphs: [
+      {
+        text: "Descubre cómo funciona por dentro la sala de EL MENTOR TRADER y observa lo que nuestros alumnos están viendo, comentando y consiguiendo día tras día.",
+        highlights: ["EL MENTOR TRADER"],
+      },
+      {
+        text: "Aquí comparto mis análisis, mi lectura del mercado y el acompañamiento diario para que no tengas que pensar de más ni operar sin dirección.",
+        highlights: ["mis análisis", "acompañamiento diario"],
+      },
     ],
+    subheading: "Acompaña mis análisis y opera con más seguridad",
+    carouselIntro:
+      "Revisa algunos accesos, comentarios y resultados compartidos por alumnos que ya están dentro de la sala.",
+    ctaLabel: "QUIERO ENTRAR A LA SALA",
+    supportText: "Plazas limitadas · El acceso puede cerrarse pronto",
     carousel: [
       {
         type: "review" as const,
@@ -142,30 +176,59 @@ export const content = {
   },
   mentor: {
     id: "mentor",
-    eyebrow: "SOBRE O MENTOR",
+    eyebrow: "SOBRE EL MENTOR",
     name: "El Mentor Trader",
-    titleBefore: "Quem é",
-    titleHighlight: "El Mentor Trader?",
+    titleBefore: "¿Quién es",
+    titleHighlight: "EL MENTOR TRADER?",
     image: "/images/mentor-about-hq.png",
-    bio: "Trader e investidor há mais de 11 anos. Comecei no mercado com apenas 18 anos de idade e, desde então, transformei disciplina em liberdade financeira.",
-    bioClosing:
-      "Hoje, sou referência no mercado de Opções Binárias e minha missão é ensinar um método simples, realista e lucrativo para que mais pessoas alcancem resultados consistentes.",
-    credentials: [
-      { label: "+11 ANOS DE MERCADO", icon: "target" as const },
-      { label: "NÚMERO 1 EM OPÇÕES BINÁRIAS", icon: "award" as const },
-      { label: "MILHARES DE ALUNOS FORMADOS", icon: "users" as const },
+    paragraphs: [
+      {
+        text: "Soy trader y analista de mercado, con más de 6 años de experiencia en inversiones.",
+        highlights: ["6 años"],
+      },
+      {
+        text: "En los últimos 4 años, he enfocado mi trabajo principalmente en criptomonedas, activos monetarios y pares de divisas, siguiendo de cerca oportunidades en mercados como EUR/USD, GBP/USD y otros activos de alta volatilidad.",
+        highlights: ["4 años", "criptomonedas", "EUR/USD", "GBP/USD"],
+      },
+      {
+        text: "Durante este tiempo, más de 2.300 alumnos ya han pasado por mi acompañamiento y han dado pasos reales para convertirse en traders con una visión mucho más clara del mercado.",
+        highlights: ["2.300 alumnos", "traders"],
+      },
+      {
+        text: "Mi objetivo es ayudarte a entender mejor los movimientos, acompañar análisis más precisos y operar con una dirección mucho más clara todos los días.",
+        highlights: ["análisis más precisos", "dirección mucho más clara"],
+      },
     ],
-    ctaLabel: "QUERO SER GUIADO POR EL MENTOR TRADER",
+    ctaLabel: "ENTRAR A EL MENTOR TRADER",
+  },
+  urgency: {
+    id: "unete",
+    eyebrow: "URGENCIA / CTA",
+    titleBefore: "Únete ahora a la sala de",
+    titleHighlight: "EL MENTOR TRADER",
+    paragraphs: [
+      {
+        text: "Forma parte de una sala donde acompañas análisis diarios, entiendes mejor los movimientos del mercado y avanzas junto a una comunidad de alumnos que ya están en el proceso.",
+        highlights: ["análisis diarios", "comunidad de alumnos"],
+      },
+      {
+        text: "Las plazas para este mes son limitadas y el acceso puede cerrarse en cualquier momento.",
+        highlights: ["plazas para este mes son limitadas", "puede cerrarse en cualquier momento"],
+      },
+    ],
+    ctaLabel: "ENTRAR AHORA",
+    supportText: "Pocas plazas disponibles · Acceso sujeto a disponibilidad",
+    backgroundImage: "/images/urgency-trading-bg.png",
   },
   footer: {
-    riskTitle: "Aviso de Risco",
+    riskTitle: "Aviso de Riesgo",
     riskWarning:
-      "As negociações em Opções Binárias envolvem alto risco e podem não ser adequadas para todos os investidores. Existe a possibilidade de perda de parte ou de todo o seu capital investido. Resultados passados não garantem resultados futuros.",
-    secureLabel: "Plataforma segura e comprometida com a sua privacidade.",
-    copyright: "© 2026 El Mentor Trader. Todos os direitos reservados.",
+      "Las operaciones en Opciones Binarias conllevan un alto riesgo y pueden no ser adecuadas para todos los inversores. Existe la posibilidad de perder parte o la totalidad de su capital invertido. Los resultados pasados no garantizan resultados futuros.",
+    secureLabel: "Plataforma segura y comprometida con tu privacidad.",
+    copyright: "© 2026 El Mentor Trader. Todos los derechos reservados.",
     links: [
-      { label: "Política de Privacidade", href: "#" },
-      { label: "Termos de Uso", href: "#" },
+      { label: "Política de Privacidad", href: "#" },
+      { label: "Términos de Uso", href: "#" },
     ],
   },
 } as const;

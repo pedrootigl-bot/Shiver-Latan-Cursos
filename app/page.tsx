@@ -1,8 +1,21 @@
+import dynamic from "next/dynamic";
 import { Hero } from "@/components/Hero";
-import { Modules } from "@/components/Modules";
-import { Results } from "@/components/Results";
-import { Mentor } from "@/components/Mentor";
-import { Footer } from "@/components/Footer";
+
+const Modules = dynamic(() =>
+  import("@/components/Modules").then((mod) => mod.Modules),
+);
+const Results = dynamic(() =>
+  import("@/components/Results").then((mod) => mod.Results),
+);
+const Mentor = dynamic(() =>
+  import("@/components/Mentor").then((mod) => mod.Mentor),
+);
+const UrgencyCta = dynamic(() =>
+  import("@/components/UrgencyCta").then((mod) => mod.UrgencyCta),
+);
+const Footer = dynamic(() =>
+  import("@/components/Footer").then((mod) => mod.Footer),
+);
 
 export default function Home() {
   return (
@@ -18,6 +31,7 @@ export default function Home() {
         <Modules />
         <Results />
         <Mentor />
+        <UrgencyCta />
         <Footer />
       </main>
     </>

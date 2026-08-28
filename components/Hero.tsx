@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { ArrowDown, ArrowUp, Star } from "lucide-react";
 import { content } from "@/lib/content";
 import { Button } from "@/components/ui/Button";
+import { renderHighlightedText } from "@/lib/highlight-text";
 import { easeOut, fadeUp, staggerContainer } from "@/lib/motion";
 
 function PairFlags({ codes }: { codes: readonly string[] }) {
@@ -33,19 +34,51 @@ function PairFlags({ codes }: { codes: readonly string[] }) {
   );
 }
 
+function HeroCta({
+  ctaUrl,
+  ctaLabel,
+  supportText,
+  className = "",
+}: {
+  ctaUrl: string;
+  ctaLabel: string;
+  supportText: string;
+  className?: string;
+}) {
+  return (
+    <div
+      className={`flex w-full flex-col items-stretch gap-3 border-t border-white/[0.08] pt-6 sm:gap-3.5 sm:pt-7 ${className}`}
+    >
+      <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+        <Button
+          variant="blue"
+          href={ctaUrl}
+          className="min-h-12 w-full border-2 border-[#0033aa] px-6 py-3.5 text-[0.8125rem] tracking-wide shadow-[0_0_28px_rgba(0,102,255,0.55)] sm:min-h-[3.25rem] sm:px-8 sm:text-sm lg:text-[0.9375rem]"
+        >
+          <Star className="h-4 w-4 shrink-0 fill-white" />
+          {ctaLabel}
+        </Button>
+      </motion.div>
+      <p className="text-center text-xs leading-relaxed tracking-[0.02em] text-white/55 lg:text-left">
+        {supportText}
+      </p>
+    </div>
+  );
+}
+
 export function Hero() {
   const { hero, ctaUrl } = content;
-  const { headline, subheadline } = hero;
+  const { headline, paragraphs } = hero;
 
   return (
     <section
       className="relative overflow-hidden bg-black pt-6 pb-12 sm:flex sm:min-h-[98svh] sm:flex-col sm:justify-center sm:pt-8 sm:pb-16 lg:pt-10 lg:pb-20"
       id="inicio"
-      aria-label="Apresentação do curso"
+      aria-label="Presentación de El Mentor Trader"
     >
-      <div className="relative mx-auto grid max-w-7xl w-full items-center gap-4 px-4 sm:gap-5 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:grid-rows-[auto_auto] lg:gap-x-6 lg:gap-y-5 lg:px-10">
+      <div className="relative mx-auto grid max-w-7xl w-full items-center gap-6 px-4 sm:gap-8 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-x-10 lg:px-10">
         <motion.div
-          className="relative z-10 order-1 flex flex-col items-start gap-3 sm:gap-4 lg:col-start-1 lg:row-start-1"
+          className="relative z-10 order-1 flex flex-col items-start lg:col-start-1 lg:row-start-1"
           variants={staggerContainer}
           initial="hidden"
           animate="visible"
@@ -53,33 +86,47 @@ export function Hero() {
           <motion.h1
             variants={fadeUp}
             transition={{ duration: 0.65, ease: easeOut }}
-            className="max-w-xl text-[1.75rem] font-extrabold leading-[1.15] tracking-tight text-white sm:text-4xl lg:text-[2.75rem]"
+            className="w-full max-w-none text-[1.7rem] font-extrabold leading-[1.2] tracking-tight text-white sm:max-w-xl sm:text-[2.35rem] sm:leading-[1.14] lg:max-w-2xl lg:text-[2.65rem]"
           >
-            {headline.before}
-            <span className="text-[var(--blue-glow)]">{headline.highlightGreen}</span>
-            {headline.middle}
-            <span className="text-[var(--orange)]">
-              {headline.highlightOrange}
+            {headline.line1}
+            <br className="sm:hidden" />
+            <span className="sm:ml-1">{headline.line2}</span>
+            <span className="mt-1 block text-[var(--blue-glow)] sm:mt-1.5">
+              {headline.highlight}
             </span>
           </motion.h1>
 
-          <motion.p
+          <div className="mt-5 flex w-full max-w-xl flex-col gap-4 sm:mt-6 sm:max-w-2xl sm:gap-5 lg:mt-7">
+            {paragraphs.map((paragraph, index) => (
+              <motion.p
+                key={paragraph.text.slice(0, 32)}
+                variants={fadeUp}
+                transition={{ duration: 0.6, ease: easeOut, delay: index * 0.06 }}
+                className={
+                  index === 0
+                    ? "text-[0.9375rem] leading-[1.72] text-white/88 sm:text-base sm:leading-[1.75] lg:text-[1.0625rem]"
+                    : "text-[0.875rem] leading-[1.68] text-white/68 sm:text-[0.9375rem] sm:leading-[1.72] lg:text-base"
+                }
+              >
+                {renderHighlightedText(paragraph.text, paragraph.highlights)}
+              </motion.p>
+            ))}
+          </div>
+
+          <motion.div
             variants={fadeUp}
-            transition={{ duration: 0.6, ease: easeOut }}
-            className="max-w-md text-[0.9rem] leading-relaxed text-white/90 sm:text-base lg:text-lg"
+            transition={{ duration: 0.55, ease: easeOut, delay: 0.2 }}
+            className="mt-7 hidden w-full max-w-xl lg:mt-9 lg:flex lg:max-w-2xl"
           >
-            {subheadline.before}
-            <span className="font-semibold text-[var(--orange)]">
-              {subheadline.highlightOrange}
-            </span>
-            {subheadline.middle}
-            <span className="font-semibold text-[var(--blue-glow)]">
-              {subheadline.highlightGreen}
-            </span>
-          </motion.p>
+            <HeroCta
+              ctaUrl={ctaUrl}
+              ctaLabel={hero.ctaLabel}
+              supportText={hero.supportText}
+            />
+          </motion.div>
         </motion.div>
 
-        <div className="relative order-2 mx-auto w-full max-w-[380px] sm:max-w-[520px] lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:mx-0 lg:max-w-none lg:h-full lg:min-h-0">
+        <div className="relative order-2 mx-auto w-full max-w-[380px] sm:max-w-[520px] lg:col-start-2 lg:row-start-1 lg:mx-0 lg:max-w-none lg:h-full lg:min-h-0">
           <div className="relative mx-auto aspect-[3/4] w-full max-h-[50svh] max-w-[480px] sm:aspect-[4/5] sm:max-h-[60svh] lg:max-h-[74svh] lg:max-w-none">
             <motion.div
               className="absolute inset-0"
@@ -92,7 +139,7 @@ export function Hero() {
                 alt="El Mentor Trader"
                 fill
                 priority
-                quality={100}
+                quality={82}
                 sizes="(max-width: 768px) 100vw, (max-width: 1280px) 55vw, 800px"
                 className="object-contain object-bottom"
               />
@@ -167,21 +214,17 @@ export function Hero() {
         </div>
 
         <motion.div
-          className="relative z-10 order-3 flex justify-center lg:col-start-1 lg:row-start-2 lg:justify-start"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, ease: easeOut, delay: 0.35 }}
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.98 }}
+          variants={fadeUp}
+          initial="hidden"
+          animate="visible"
+          transition={{ duration: 0.55, ease: easeOut, delay: 0.25 }}
+          className="order-3 mx-auto mt-2 w-full max-w-xl sm:max-w-2xl lg:hidden"
         >
-          <Button
-            variant="blue"
-            href={ctaUrl}
-            className="min-h-11 w-full max-w-md border-2 border-[#0033aa] px-6 py-3 text-sm shadow-[0_0_28px_rgba(0,102,255,0.55)] sm:min-h-12 sm:w-auto sm:px-8 sm:py-3.5 sm:text-base"
-          >
-            <Star className="h-4 w-4 fill-white" />
-            {hero.ctaLabel}
-          </Button>
+          <HeroCta
+            ctaUrl={ctaUrl}
+            ctaLabel={hero.ctaLabel}
+            supportText={hero.supportText}
+          />
         </motion.div>
       </div>
 

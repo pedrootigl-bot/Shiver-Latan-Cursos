@@ -11,8 +11,8 @@ export function Footer() {
 
   return (
     <footer
-      aria-label="Rodapé do site"
-      className="border-t border-white/[0.06] bg-[#05070a]"
+      aria-label="Pie de página del sitio"
+      className="section-deferred border-t border-white/[0.06] bg-[#05070a]"
     >
       <motion.div
         className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-10 lg:py-14"

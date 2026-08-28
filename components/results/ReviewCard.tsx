@@ -13,6 +13,8 @@ export function ReviewCard({ data }: { data: ReviewCardData }) {
             src={data.avatar}
             alt={data.name}
             fill
+            loading="lazy"
+            quality={70}
             className="object-cover"
             sizes="40px"
           />

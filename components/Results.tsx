@@ -1,13 +1,21 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Zap } from "lucide-react";
+import { Star } from "lucide-react";
 import { content, type ResultCarouselItem } from "@/lib/content";
+import { renderHighlightedText } from "@/lib/highlight-text";
+import { easeOut, fadeUp, staggerContainer, viewportOnce } from "@/lib/motion";
 import { ReviewCard } from "./results/ReviewCard";
 import { TradingCard } from "./results/TradingCard";
 import { ChatCard } from "./results/ChatCard";
 import { WalletCard } from "./results/WalletCard";
+
+const cardTypeLabels: Record<ResultCarouselItem["type"], string> = {
+  review: "Testimonio",
+  trading: "Operaciones",
+  chat: "Sala en vivo",
+  wallet: "Resultado",
+};
 
 function ResultCard({ item }: { item: ResultCarouselItem }) {
   switch (item.type) {
@@ -26,128 +34,179 @@ function ResultCard({ item }: { item: ResultCarouselItem }) {
   }
 }
 
+function ResultsCta({
+  ctaUrl,
+  ctaLabel,
+  supportText,
+  className = "",
+}: {
+  ctaUrl: string;
+  ctaLabel: string;
+  supportText: string;
+  className?: string;
+}) {
+  return (
+    <div
+      className={`flex flex-col items-stretch gap-3 border-t border-white/[0.08] pt-6 sm:pt-7 ${className}`}
+    >
+      <motion.a
+        href={ctaUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full border-2 border-[#0033aa] bg-[var(--blue)] px-6 py-3.5 text-[0.8125rem] font-bold uppercase tracking-wide text-white transition hover:brightness-110 sm:min-h-[3.25rem] sm:px-8 sm:text-sm"
+      >
+        <Star className="h-4 w-4 shrink-0 fill-white" />
+        {ctaLabel}
+      </motion.a>
+      <p className="text-center text-xs leading-relaxed tracking-[0.02em] text-white/55 lg:text-left">
+        {supportText}
+      </p>
+    </div>
+  );
+}
+
 export function Results() {
-  const { results } = content;
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const mobileGap = 12;
-
-  const updateScrollState = useCallback(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-
-    const cardWidth = el.firstElementChild?.clientWidth ?? 0;
-    const index = Math.round(
-      el.scrollLeft / Math.max(cardWidth + mobileGap, 1),
-    );
-    setActiveIndex(Math.min(index, results.carousel.length - 1));
-  }, [results.carousel.length]);
-
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-
-    updateScrollState();
-    el.addEventListener("scroll", updateScrollState, { passive: true });
-    window.addEventListener("resize", updateScrollState);
-    return () => {
-      el.removeEventListener("scroll", updateScrollState);
-      window.removeEventListener("resize", updateScrollState);
-    };
-  }, [updateScrollState]);
-
-  const scrollToIndex = (index: number) => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const cardWidth = el.firstElementChild?.clientWidth ?? 260;
-    el.scrollTo({
-      left: index * (cardWidth + mobileGap),
-      behavior: "smooth",
-    });
-  };
+  const { results, ctaUrl } = content;
 
   return (
     <section
       id={results.id}
       aria-labelledby="resultados-titulo"
-      className="section-fade-top relative overflow-hidden bg-[#0b0d11] pb-14 pt-12 sm:pb-16 sm:pt-14 lg:pb-24 lg:pt-20"
+      aria-label="Accesos a la sala y resultados de alumnos"
+      className="section-fade-top section-deferred relative bg-[#0b0d11] pb-16 pt-14 sm:pb-20 sm:pt-16 lg:pb-28 lg:pt-20"
     >
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-[42%] h-[320px] w-[min(100%,720px)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(0,102,255,0.10),transparent_68%)] sm:h-[420px]"
-        animate={{ opacity: [0.55, 1, 0.55], scale: [0.96, 1.04, 0.96] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-      />
-
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.5 }}
-          className="mx-auto max-w-3xl text-center"
-        >
-          <span className="inline-flex items-center gap-2 rounded-full border border-[var(--blue-glow)]/30 bg-[var(--blue-glow)]/5 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--blue-glow)] sm:px-4 sm:text-[11px]">
-            <Zap className="h-3.5 w-3.5 fill-[var(--blue-glow)]" />
-            {results.badge}
-          </span>
-
-          <h2
-            id="resultados-titulo"
-            className="mt-4 text-[1.65rem] font-extrabold leading-tight tracking-tight text-white sm:mt-5 sm:text-4xl lg:text-[2.75rem]"
-          >
-            {results.titleBefore}{" "}
-            <span className="text-[var(--blue-soft)]">
-              {results.titleHighlight}
-            </span>
-          </h2>
-
-          <div className="mt-3 space-y-1 text-sm leading-relaxed text-white/50 sm:mt-4 sm:text-base">
-            {results.description.map((line) => (
-              <p key={line}>{line}</p>
-            ))}
-          </div>
-        </motion.div>
-
-        <div className="relative mt-8 sm:mt-12 lg:mt-14">
-          <div
-            ref={scrollRef}
-            className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 [-ms-overflow-style:none] [scrollbar-width:none] sm:mx-0 sm:gap-4 sm:px-0 lg:grid lg:grid-cols-4 lg:gap-5 lg:overflow-visible lg:pb-0 lg:snap-none [&::-webkit-scrollbar]:hidden"
-            data-lenis-prevent-touch
-          >
-            {results.carousel.map((item, index) => (
+        <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(280px,0.92fr)_minmax(0,1.35fr)] lg:gap-12 xl:gap-14">
+          {/* Coluna esquerda — altura da linha = cards; sticky só no bloco de texto */}
+          <div className="relative min-w-0 lg:self-stretch">
+            <div className="lg:sticky lg:top-24">
               <motion.div
+                variants={staggerContainer}
+                initial="hidden"
+                whileInView="visible"
+                viewport={viewportOnce}
+                className="flex max-w-lg flex-col gap-4 sm:gap-5"
+              >
+                <motion.p
+                  variants={fadeUp}
+                  transition={{ duration: 0.5, ease: easeOut }}
+                  className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--blue-glow)] sm:text-xs"
+                >
+                  {results.badge}
+                </motion.p>
+
+                <motion.h2
+                  id="resultados-titulo"
+                  variants={fadeUp}
+                  transition={{ duration: 0.55, ease: easeOut }}
+                  className="text-[1.65rem] font-extrabold leading-[1.14] tracking-tight text-white sm:text-4xl sm:leading-[1.12]"
+                >
+                  {results.title}
+                </motion.h2>
+
+                <div className="flex flex-col gap-3.5 sm:gap-4">
+                  {results.paragraphs.map((paragraph, index) => (
+                    <motion.p
+                      key={paragraph.text.slice(0, 32)}
+                      variants={fadeUp}
+                      transition={{
+                        duration: 0.5,
+                        ease: easeOut,
+                        delay: index * 0.05,
+                      }}
+                      className={
+                        index === 0
+                          ? "text-[0.9375rem] leading-[1.72] text-white/88 sm:text-base sm:leading-[1.75]"
+                          : "text-[0.875rem] leading-[1.68] text-white/68 sm:text-[0.9375rem] sm:leading-[1.72]"
+                      }
+                    >
+                      {renderHighlightedText(
+                        paragraph.text,
+                        paragraph.highlights,
+                      )}
+                    </motion.p>
+                  ))}
+                </div>
+
+                <motion.div
+                  variants={fadeUp}
+                  transition={{ duration: 0.5, ease: easeOut, delay: 0.12 }}
+                  className="w-full rounded-2xl border border-[var(--blue-glow)]/20 bg-[var(--blue-glow)]/[0.06] px-4 py-4 sm:px-5 sm:py-4"
+                >
+                  <p className="text-[0.9375rem] font-semibold leading-[1.55] text-white sm:text-base">
+                    {results.subheading}
+                  </p>
+                </motion.div>
+
+                <motion.p
+                  variants={fadeUp}
+                  transition={{ duration: 0.45, ease: easeOut, delay: 0.14 }}
+                  className="text-sm leading-relaxed text-white/52 sm:text-[0.9375rem]"
+                >
+                  {results.carouselIntro}
+                </motion.p>
+
+                <motion.div
+                  variants={fadeUp}
+                  transition={{ duration: 0.55, ease: easeOut, delay: 0.18 }}
+                  className="hidden lg:block"
+                >
+                  <ResultsCta
+                    ctaUrl={ctaUrl}
+                    ctaLabel={results.ctaLabel}
+                    supportText={results.supportText}
+                  />
+                </motion.div>
+              </motion.div>
+            </div>
+          </div>
+
+          {/* Coluna direita — cards em fluxo normal */}
+          <ul className="relative flex min-w-0 flex-col gap-4 sm:gap-5 lg:border-l lg:border-white/[0.08] lg:pl-8">
+            {results.carousel.map((item, index) => (
+              <motion.li
                 key={`${item.type}-${index}`}
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.45, delay: index * 0.08 }}
-                whileHover={{ y: -8, transition: { duration: 0.25 } }}
-                className="w-[min(82vw,270px)] shrink-0 snap-center sm:w-[300px] sm:snap-start lg:w-auto lg:shrink"
+                transition={{ duration: 0.45, delay: index * 0.06, ease: easeOut }}
+                className="relative mx-auto w-full max-w-[340px] lg:mx-0 lg:max-w-none"
               >
-                <div className="h-[360px] sm:h-[400px]">
+                <span
+                  aria-hidden
+                  className="absolute -left-[2.125rem] top-7 hidden h-2.5 w-2.5 rounded-full border-2 border-[#0b0d11] bg-[var(--blue-glow)] lg:block"
+                />
+
+                <div className="mb-2.5 flex items-center gap-2">
+                  <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--blue-glow)] sm:text-[11px]">
+                    {cardTypeLabels[item.type]}
+                  </span>
+                  <span className="h-px flex-1 bg-white/[0.08]" />
+                </div>
+
+                <div className="h-[360px] overflow-hidden rounded-2xl sm:h-[390px]">
                   <ResultCard item={item} />
                 </div>
-              </motion.div>
+              </motion.li>
             ))}
-          </div>
-
-          <div className="mt-5 flex items-center justify-center gap-2 sm:mt-8 lg:hidden">
-            {results.carousel.map((item, index) => (
-              <button
-                key={`dot-${item.type}-${index}`}
-                type="button"
-                aria-label={`Ir para slide ${index + 1}`}
-                onClick={() => scrollToIndex(index)}
-                className={`h-2.5 min-w-2.5 rounded-full transition-all ${
-                  activeIndex === index
-                    ? "w-7 bg-[var(--blue-glow)]"
-                    : "w-2.5 bg-white/25"
-                }`}
-              />
-            ))}
-          </div>
+          </ul>
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={viewportOnce}
+          transition={{ duration: 0.45, delay: 0.1 }}
+          className="mx-auto mt-10 max-w-lg lg:hidden"
+        >
+          <ResultsCta
+            ctaUrl={ctaUrl}
+            ctaLabel={results.ctaLabel}
+            supportText={results.supportText}
+          />
+        </motion.div>
       </div>
     </section>
   );

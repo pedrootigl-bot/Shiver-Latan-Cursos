@@ -54,6 +54,8 @@ export function WalletCard({ data }: { data: WalletCardData }) {
                 src={data.avatar}
                 alt={data.author}
                 fill
+                loading="lazy"
+                quality={70}
                 className="object-cover"
                 sizes="28px"
               />

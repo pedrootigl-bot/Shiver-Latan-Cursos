@@ -72,6 +72,8 @@ export function ChatCard({ data }: { data: ChatCardData }) {
                   src={msg.avatar}
                   alt=""
                   fill
+                  loading="lazy"
+                  quality={70}
                   className="object-cover"
                   sizes="24px"
                 />

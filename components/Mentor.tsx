@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowRight, Award, Crosshair, GraduationCap } from "lucide-react";
+import { Star } from "lucide-react";
 import { content } from "@/lib/content";
-import { Button } from "@/components/ui/Button";
+import { renderHighlightedText } from "@/lib/highlight-text";
 import {
   easeOut,
   fadeLeft,
@@ -13,23 +13,17 @@ import {
   viewportOnce,
 } from "@/lib/motion";
 
-const credentialIcons = {
-  target: Crosshair,
-  award: Award,
-  users: GraduationCap,
-} as const;
-
 export function Mentor() {
-  const { mentor } = content;
+  const { mentor, ctaUrl } = content;
 
   return (
     <section
       id={mentor.id}
       aria-labelledby="mentor-titulo"
-      className="section-fade-top relative overflow-hidden bg-[#05070a] py-1 lg:py-1.5"
+      aria-label="Sobre El Mentor Trader"
+      className="section-fade-top section-deferred relative overflow-hidden bg-[#05070a] py-1 lg:py-1.5"
     >
       <div className="grid lg:grid-cols-2 lg:items-stretch">
-        {/* Textos — mobile 1º | desktop coluna direita */}
         <motion.div
           className="relative order-1 flex flex-col justify-center px-4 pb-4 pt-10 sm:px-10 sm:pt-14 lg:order-2 lg:px-12 lg:py-20 xl:px-16"
           variants={staggerContainer}
@@ -49,76 +43,54 @@ export function Mentor() {
             id="mentor-titulo"
             variants={fadeUp}
             transition={{ duration: 0.55, ease: easeOut }}
-            className="mt-3 text-[1.65rem] font-extrabold leading-tight tracking-tight text-white sm:mt-4 sm:text-4xl lg:text-[2.75rem]"
+            className="mt-3 max-w-xl text-[1.65rem] font-extrabold leading-[1.14] tracking-tight text-white sm:mt-4 sm:text-4xl sm:leading-[1.12] lg:text-[2.75rem]"
           >
             {mentor.titleBefore}{" "}
-            <span className="text-[var(--orange)]">
-              {mentor.titleHighlight}
-            </span>
+            <span className="text-[var(--blue-glow)]">{mentor.titleHighlight}</span>
           </motion.h2>
 
-          <motion.p
-            variants={fadeUp}
-            transition={{ duration: 0.5, ease: easeOut }}
-            className="mt-4 max-w-xl text-sm leading-relaxed text-white/80 sm:mt-5 sm:text-base"
-          >
-            {mentor.bio}
-          </motion.p>
+          <div className="mt-4 flex max-w-xl flex-col gap-3.5 sm:mt-5 sm:gap-4">
+            {mentor.paragraphs.map((paragraph, index) => (
+              <motion.p
+                key={paragraph.text.slice(0, 32)}
+                variants={fadeUp}
+                transition={{
+                  duration: 0.5,
+                  ease: easeOut,
+                  delay: index * 0.05,
+                }}
+                className={
+                  index === 0
+                    ? "text-[0.9375rem] leading-[1.72] text-white/88 sm:text-base sm:leading-[1.75]"
+                    : index === mentor.paragraphs.length - 1
+                      ? "text-[0.875rem] leading-[1.68] text-white/75 sm:text-[0.9375rem] sm:leading-[1.72]"
+                      : "text-[0.875rem] leading-[1.68] text-white/68 sm:text-[0.9375rem] sm:leading-[1.72]"
+                }
+              >
+                {renderHighlightedText(paragraph.text, paragraph.highlights)}
+              </motion.p>
+            ))}
+          </div>
 
-          <motion.ul
-            variants={staggerContainer}
-            className="mt-6 grid grid-cols-1 gap-5 sm:mt-8 sm:grid-cols-3 sm:gap-4"
-          >
-            {mentor.credentials.map((item) => {
-              const Icon = credentialIcons[item.icon];
-              return (
-                <motion.li
-                  key={item.label}
-                  variants={fadeUp}
-                  transition={{ duration: 0.45, ease: easeOut }}
-                  whileHover={{ y: -4 }}
-                  className="flex flex-row items-center gap-3 sm:flex-col sm:items-center sm:gap-2.5 sm:text-center"
-                >
-                  <Icon
-                    className="h-6 w-6 shrink-0 text-[var(--blue-glow)] sm:h-7 sm:w-7"
-                    strokeWidth={1.6}
-                  />
-                  <span className="max-w-[16rem] text-[11px] font-bold uppercase leading-snug tracking-wide text-white sm:max-w-[11rem]">
-                    {item.label}
-                  </span>
-                </motion.li>
-              );
-            })}
-          </motion.ul>
-
-          <motion.p
-            variants={fadeUp}
-            transition={{ duration: 0.5, ease: easeOut }}
-            className="mt-6 max-w-xl text-sm leading-relaxed text-white/80 sm:mt-8 sm:text-base"
-          >
-            {mentor.bioClosing}
-          </motion.p>
-
-          {/* CTA no fluxo do texto só no desktop */}
           <motion.div
             variants={fadeLeft}
-            transition={{ duration: 0.5, ease: easeOut }}
-            className="mt-8 hidden lg:block"
-            whileHover={{ scale: 1.03 }}
+            transition={{ duration: 0.5, ease: easeOut, delay: 0.15 }}
+            className="mt-8 hidden border-t border-white/[0.08] pt-7 lg:block"
+            whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <Button
-              variant="orange"
-              href={content.ctaUrl}
-              className="rounded-xl px-7 py-3.5"
+            <a
+              href={ctaUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border-2 border-[#0033aa] bg-[var(--blue)] px-7 py-3.5 text-sm font-bold uppercase tracking-wide text-white shadow-[0_0_28px_rgba(0,102,255,0.55)] transition hover:brightness-110"
             >
+              <Star className="h-4 w-4 shrink-0 fill-white" />
               {mentor.ctaLabel}
-              <ArrowRight className="h-4 w-4" />
-            </Button>
+            </a>
           </motion.div>
         </motion.div>
 
-        {/* Imagem — mobile 2º (após textos) | desktop esquerda full-height */}
         <motion.div
           initial={{ opacity: 0, x: -40 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -130,10 +102,10 @@ export function Mentor() {
             src={mentor.image}
             alt={mentor.name}
             fill
-            quality={95}
+            quality={80}
+            loading="lazy"
             className="object-cover object-[center_20%]"
             sizes="(max-width: 1024px) 100vw, 50vw"
-            priority={false}
           />
           <div
             aria-hidden
@@ -141,26 +113,24 @@ export function Mentor() {
           />
         </motion.div>
 
-        {/* CTA mobile — após a imagem */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={viewportOnce}
           transition={{ duration: 0.45, ease: easeOut }}
-          className="order-3 px-4 pb-10 pt-5 sm:px-10 sm:pb-12 sm:pt-6 lg:hidden"
+          className="order-3 border-t border-white/[0.08] px-4 pb-10 pt-6 sm:px-10 sm:pb-12 lg:hidden"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
-          <Button
-            variant="orange"
-            href={content.ctaUrl}
-            className="min-h-12 w-full whitespace-normal rounded-xl px-4 py-3.5 text-center text-[11px] leading-snug sm:px-7 sm:text-sm"
+          <a
+            href={ctaUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full border-2 border-[#0033aa] bg-[var(--blue)] px-4 py-3.5 text-[0.8125rem] font-bold uppercase tracking-wide text-white shadow-[0_0_28px_rgba(0,102,255,0.55)] transition hover:brightness-110 sm:px-7 sm:text-sm"
           >
-            <span className="flex min-w-0 items-center justify-center gap-2">
-              {mentor.ctaLabel}
-              <ArrowRight className="h-4 w-4 shrink-0" />
-            </span>
-          </Button>
+            <Star className="h-4 w-4 shrink-0 fill-white" />
+            {mentor.ctaLabel}
+          </a>
         </motion.div>
       </div>
     </section>

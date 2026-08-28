@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import Lenis from "lenis";
-import "lenis/dist/lenis.css";
+import type Lenis from "lenis";
 import { setLenisInstance } from "@/lib/lenis-instance";
 
 /**
@@ -23,27 +22,36 @@ function shouldPreventLenis(node: HTMLElement) {
 
 export function SmoothScroll() {
   useEffect(() => {
-    const lenis = new Lenis({
-      autoRaf: true,
-      smoothWheel: true,
-      // Mobile/touch: comportamento nativo (sem sync artificial)
-      syncTouch: false,
-      lerp: LENIS_LERP,
-      wheelMultiplier: LENIS_WHEEL_MULTIPLIER,
-      // Carrosséis horizontais e containers overflow
-      allowNestedScroll: true,
-      // Âncoras (#modulos, #resultados, #mentor, etc.)
-      anchors: true,
-      // prefers-reduced-motion: reduce → sem suavização
-      respectReducedMotion: true,
-      prevent: shouldPreventLenis,
-    });
+    let lenis: Lenis | null = null;
+    let cancelled = false;
 
-    setLenisInstance(lenis);
+    void (async () => {
+      const [{ default: Lenis }] = await Promise.all([
+        import("lenis"),
+        import("lenis/dist/lenis.css"),
+      ]);
+
+      if (cancelled) return;
+
+      lenis = new Lenis({
+        autoRaf: true,
+        smoothWheel: true,
+        syncTouch: false,
+        lerp: LENIS_LERP,
+        wheelMultiplier: LENIS_WHEEL_MULTIPLIER,
+        allowNestedScroll: true,
+        anchors: true,
+        respectReducedMotion: true,
+        prevent: shouldPreventLenis,
+      });
+
+      setLenisInstance(lenis);
+    })();
 
     return () => {
+      cancelled = true;
+      lenis?.destroy();
       setLenisInstance(null);
-      lenis.destroy();
     };
   }, []);
 
